@@ -1,0 +1,19 @@
+* {
+    font-family: "Prompt", serif;
+    font-style: normal;
+}
+
+
+.shadows {
+    box-shadow: 19px 17px 45px -22px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 19px 17px 45px -22px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 19px 17px 45px -22px rgba(0, 0, 0, 0.75);
+}
+.hero-banner {
+    width: 100%;
+    border-radius: 25px;
+}
+
+.fs-title {
+    font-size: 30px;
+}
