@@ -37,6 +37,8 @@
                         </div>
 
                         <div class="row">
+
+                            {{-- Add produk/games --}}
                             <div class="col-lg-3 my-3">
                                 <a href="#" x-data @click="$dispatch('open-modal', 'addProductModal')"
                                     class="justify-content-center d-flex">
@@ -48,17 +50,21 @@
                                     </div>
                                 </a>
                             </div>
+
+                            {{-- Add jadwal-games --}}
                             <div class="col-lg-3 my-3">
-                                <a href="#" x-data @click="$dispatch('open-modal', 'addPenjualanModal')"
+                                <a href="#" x-data @click="$dispatch('open-modal', 'addJadwalModal')"
                                     class="justify-content-center d-flex">
                                     <div class="box-menu justify-content-center d-flex">
                                         <img class="icon-menu" src="{{ asset('media/jual.png') }}" alt="">
                                     </div>
                                     <div class="mb-3 my-3 mx-3">
-                                        <h5>Form Tambah Penjualan</h5>
+                                        <h5>Form Tambah Jadwal</h5>
                                     </div>
                                 </a>
                             </div>
+
+                            {{-- Check riwata transaksi --}}
                             <div class="col-lg-3 my-3">
                                 <a href="#" x-data @click="$dispatch('open-modal', 'addRiwayatModal')"
                                     class="justify-content-center d-flex">
@@ -70,9 +76,11 @@
                                     </div>
                                 </a>
                             </div>
+
                         </div>
 
                         {{-- MODAL POP UP --}}
+                        
                         <!-- Modal Produk -->
                         <x-modal name="addProductModal" :show="false" maxWidth="lg">
                             <h2 class="text-lg font-semibold mb-3 px-3 py-3">Tambah Produk</h2>
@@ -89,9 +97,9 @@
                                 <div class="mb-4">
                                     <label for="jenis_ps" class="block text-sm font-medium text-gray-700">Jenis
                                         PS</label>
-                                    <select
+                                    <select id="jenis_ps" name="jenis_ps"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                                        id="jenis_ps" name="jenis_ps">
+                                        required>
                                         <option value="" selected disabled>- Pilih -</option>
                                         <option value="ps1">PS1</option>
                                         <option value="ps2">PS2</option>
@@ -118,30 +126,54 @@
                                     <button type="submit" class="btn btn-primary ml-2 mx-2">Simpan</button>
                                 </div>
                             </form>
-                        </x-modal>
+                        </x-modal> {{-- Add produk --}}
 
-                        <!-- Modal Penjualan -->
-                        <x-modal name="addPenjualanModal" :show="false" maxWidth="lg">
-                            <h2 class="text-lg font-semibold mb-3 px-3 py-3">Tambah Penjualan</h2>
-                            <form action="" method="POST" class="px-3 py-3">
+                        <x-modal name="addJadwalModal" :show="false" maxWidth="lg">
+                            <h2 class="text-lg font-semibold mb-3 px-3 py-3">Tambah Jadwal</h2>
+                            <form action="{{ route('dashboard.store_jadwal') }}" method="POST" class="px-3 py-3"
+                                id="jadwalForm">
                                 @csrf <!-- Don't forget to include CSRF token -->
+
+                                <div class="container my-3">
+                                    <div id="tanggal-container">
+                                        <label for="tanggal"
+                                            class="block text-sm font-medium text-gray-700">Tanggal</label>
+                                        <input type="date" id="tanggal" name="tanggal[]"
+                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
+                                            required>
+                                    </div>
+                                    <button type="button" id="add-tanggal" class="btn btn-primary mt-2">Tambah
+                                        Tanggal</button>
+                                </div>
+
                                 <div class="mb-4">
-                                    <label for="penjualan-product-name"
-                                        class="block text-sm font-medium text-gray-700">Nama Produk</label>
-                                    <input type="text" id="penjualan-product-name" name="penjualan_product_name"
+                                    <label for="jam_in" class="block text-sm font-medium text-gray-700">Jam
+                                        In</label>
+                                    <input type="time" id="jam_in" name="jam_in"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
                                         required>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="penjualan-amount"
-                                        class="block text-sm font-medium text-gray-700">Jumlah
-                                        Penjualan</label>
-                                    <input type="number" id="penjualan-amount" name="penjualan_amount"
+                                    <label for="jam_out" class="block text-sm font-medium text-gray-700">Jam
+                                        Out</label>
+                                    <input type="time" id="jam_out" name="jam_out"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
                                         required>
                                 </div>
+                                <div class="mb-4">
+                                    <label for="id_produks" class="block text-sm font-medium text-gray-700">Paket
+                                        Games</label>
+                                    <select name="id_produks" id="id_produks" class="form-control">
+                                        <option value="" disabled selected>- Pilih -</option>
+                                        @foreach ($produks as $item)
+                                            <option value="{{ $item->id }}">{{ $item->nama }} -
+                                                {{ $item->jenis_ps }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
                                 <div class="flex justify-end mt-4">
-                                    <button type="button" @click="$dispatch('close-modal', 'addPenjualanModal')"
+                                    <button type="button" @click="$dispatch('close-modal', 'addJadwalModal')"
                                         class="btn btn-secondary">Batal</button>
                                     <button type="submit" class="btn btn-primary ml-2 mx-2">Simpan</button>
                                 </div>
@@ -184,53 +216,17 @@
 
 
 <!-- Include SweetAlert -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-
-{{-- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Intercept form submission for addProductModal
-        const productForm = document.querySelector('form[action="{{ route('dashboard.store_produk') }}"]');
-        productForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the default form submission
-
-            // Show SweetAlert for confirmation
-            swal({
-                title: "Konfirmasi",
-                text: "Apakah Anda yakin ingin menyimpan ini?",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            }).then((willSubmit) => {
-                if (willSubmit) {
-                    this.submit(); // Submit the form if confirmed
-                }
-            });
-        });
-
-        // Trigger SweetAlert for success message after submission
-        @if (session('success'))
-            swal({
-                title: "Sukses!",
-                text: "{{ session('success') }}",
-                icon: "success",
-                button: "OK",
-            });
-        @elseif (session('error'))
-            swal({
-                title: "Error!",
-                text: "{{ session('error') }}",
-                icon: "error",
-                button: "OK",
-            });
-        @endif
-
-    });
-</script> --}}
+<!-- SweetAlert CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
 
-<!-- Include SweetAlert -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 
+{{-- Add produk --}}
+{{-- Add produk --}}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Intercept form submission for addProductModal
@@ -240,14 +236,15 @@
                 event.preventDefault(); // Prevent the default form submission
 
                 // Show SweetAlert for confirmation
-                swal({
+                Swal.fire({
                     title: "Konfirmasi",
                     text: "Apakah Anda yakin ingin menyimpan ini?",
                     icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                }).then((willSubmit) => {
-                    if (willSubmit) {
+                    showCancelButton: true,
+                    confirmButtonText: "Ya, simpan!",
+                    cancelButtonText: "Batal"
+                }).then((result) => {
+                    if (result.isConfirmed) {
                         this.submit(); // Submit the form if confirmed
                     }
                 });
@@ -256,22 +253,74 @@
 
         // SweetAlert for success message
         @if (session('success'))
-            swal({
+            Swal.fire({
                 title: "Sukses!",
                 text: "{{ session('success') }}",
                 icon: "success",
-                button: "OK",
+                confirmButtonText: "OK",
             });
         @endif
 
         // SweetAlert for error message
         @if (session('error'))
-            swal({
+            Swal.fire({
                 title: "Error!",
                 text: "{{ session('error') }}",
                 icon: "error",
-                button: "OK",
+                confirmButtonText: "OK",
             });
         @endif
+    });
+</script>
+
+
+{{-- Add jadwal --}}
+<script>
+    $(document).ready(function() {
+        $('#add-tanggal').click(function() {
+            $('#tanggal-container').append(`
+                <div class="mb-4">
+                    <label for="tanggal" class="block text-sm font-medium text-gray-700">Tanggal</label>
+                    <input type="date" name="tanggal[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" required>
+                </div>
+            `);
+        });
+
+        $('#jadwalForm').submit(function(e) {
+            e.preventDefault(); // Mencegah form dari submit default
+            const formData = $(this).serialize(); // Mengambil data form
+
+            $.ajax({
+                url: $(this).attr('action'), // Menggunakan action form
+                method: 'POST',
+                data: formData,
+                success: function(response) {
+                    // Menampilkan pesan sukses dengan SweetAlert
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sukses!',
+                        text: response.message,
+                        confirmButtonText: 'Ok'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Menutup modal
+                            $('#addJadwalModal').modal(
+                                'hide'
+                            ); // Ganti 'addJadwalModal' dengan ID modal yang sesuai
+                            $('#jadwalForm')[0].reset(); // Mereset form
+                        }
+                    });
+                },
+                error: function(xhr) {
+                    // Menangani error dengan SweetAlert
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi Kesalahan!',
+                        text: xhr.responseJSON.message || 'Silakan coba lagi.',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            });
+        });
     });
 </script>

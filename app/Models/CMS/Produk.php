@@ -12,8 +12,22 @@ class Produk extends Model
     protected $table = 'produks';
 
     protected $fillable = [
-        'foto_produk',
-        'nama_produk',
-        'harga_produk',
+        'nama',
+        'jenis_ps',
+        'harga',
+        'foto',
     ];
+
+
+    // Relasi dengan model Booking
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'produk_id');
+    }
+
+    // Relasi dengan model Jadwal jika ada (misalnya produk terkait jadwal)
+    public function jadwals()
+    {
+        return $this->hasMany(Jadwal::class);
+    }
 }

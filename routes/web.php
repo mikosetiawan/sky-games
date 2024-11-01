@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CMS\BookingController;
 use App\Http\Controllers\CMS\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WelcomeController;
@@ -28,9 +29,9 @@ Route::get('/contact', function () {
 });
 
 // booking pages
-Route::get('/booking', function () {
-    return view('pages/booking');
-});
+Route::get('/booking/{id}', [BookingController::class, 'index'])->name('booking.index');
+Route::post('/booking/store', [BookingController::class, 'store'])->name('booking.store');
+Route::post('/booking/callback', [BookingController::class, 'callback'])->name('booking.callback');
 
 
 
@@ -43,8 +44,8 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'dashboard', 'as' => 'dashboard.'], function () {
         Route::get('/', [DashboardController::class, 'index'])->name('index');
         Route::post('/tambah-produk', [DashboardController::class, 'store_produk'])->name('store_produk');
+        Route::post('/jadwal', [DashboardController::class, 'store_jadwal'])->name('store_jadwal');
     });
-
 });
 
 require __DIR__ . '/auth.php';
